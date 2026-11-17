@@ -16,14 +16,9 @@ share them or post them anywhere.
 
 ## 2. Open the Web DJ page
 
-Ask the operator for the current link — it looks like:
-
-```
-https://<current-tunnel>.trycloudflare.com/public/pomboradio/dj
-```
-
-(The `<current-tunnel>` part changes whenever the station restarts, so
-always ask for the latest link rather than reusing an old one.)
+Ask the operator for the **Web DJ link** — a web address they'll send you
+(it sometimes changes, so always use the latest one they give you, not an
+old one from before).
 
 ## 3. Log in and go live
 
@@ -32,8 +27,7 @@ always ask for the latest link rather than reusing an old one.)
 2. **Wear headphones.** If you use your laptop speakers, the mic will pick
    up the stream and cause an echo/feedback loop for everyone listening.
 3. Log in with your username and password.
-4. Allow microphone access when the browser asks — this only works because
-   the page is HTTPS (that's what the tunnel is for).
+4. Allow microphone access when the browser asks.
 5. Hit the on-air / broadcast button. You should see a "connected" /
    "streaming" indicator.
 6. Talk, play music into your mic (e.g. hold a phone speaker up to your
