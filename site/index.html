@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PomboRadio — no ar</title>
+<meta name="description" content="PomboRadio — música diretamente do Montouro. AutoDJ 24/7 e DJs convidados ao vivo." />
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="noise"></div>
+
+  <header class="topbar">
+    <span class="brand">POMBO<span class="brand-dot">RADIO</span></span>
+    <nav class="links">
+      <a href="#ouvir">ouvir</a>
+      <a href="#programas">programas</a>
+      <a href="#djs">djs</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="ouvir">
+      <p class="eyebrow">rádio de bairro · montouro</p>
+      <h1 class="title">Pombo<br>Radio</h1>
+      <p class="tagline">música diretamente do Montouro</p>
+
+      <div class="player">
+        <button id="playBtn" class="play-btn" aria-label="Ouvir agora">
+          <svg id="iconPlay" viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+          <svg id="iconPause" viewBox="0 0 24 24" width="28" height="28" style="display:none"><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+        </button>
+
+        <div class="nowplaying">
+          <div class="status">
+            <span id="liveDot" class="dot"></span>
+            <span id="statusText">a ligar&hellip;</span>
+          </div>
+          <div id="trackTitle" class="track">&nbsp;</div>
+        </div>
+      </div>
+
+      <audio id="stream" preload="none"></audio>
+    </section>
+
+    <section class="strip" id="programas">
+      <p>autodj 24/7 <span class="sep">·</span> dj's convidados ao vivo <span class="sep">·</span> sem anúncios <span class="sep">·</span> feito em casa</p>
+    </section>
+
+    <section class="about" id="djs">
+      <h2>sobre</h2>
+      <p>
+        A PomboRadio é uma rádio feita entre amigos: uma seleção musical eclética
+        a tocar sozinha a maior parte do tempo, e de vez em quando alguém entra
+        ao vivo para fazer companhia. Sem grelha fixa, sem pressa.
+      </p>
+      <p class="muted">Queres transmitir? Pede acesso de DJ a quem gere a estação.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>pomboradio · feito à mão, a tocar sempre</p>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
