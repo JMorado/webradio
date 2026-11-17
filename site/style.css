@@ -1,12 +1,14 @@
 :root {
-  --bg: #0b0b0d;
-  --bg-soft: #141417;
-  --fg: #f4f1ea;
-  --muted: #8d8a82;
-  --accent: #ff6b4a;   /* warm sunset orange */
-  --accent-2: #5eead4; /* cool teal, used sparingly */
-  --line: rgba(244, 241, 234, 0.12);
+  --bg: #070708;
+  --bg-soft: #131316;
+  --bg-card: #141417;
+  --fg: #f5f5f7;
+  --muted: #86868f;
+  --accent: #d6ff3f;   /* acid lime, single signature color */
+  --accent-2: #8b7bff; /* electric violet, used sparingly for depth */
+  --line: rgba(245, 245, 247, 0.1);
   --font: 'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-display: 'Archivo Black', 'Space Mono', ui-monospace, monospace;
 }
 
 * { box-sizing: border-box; }
@@ -40,36 +42,113 @@ body {
 a { color: inherit; text-decoration: none; }
 a:hover { color: var(--accent); }
 
+/* ---------- sticky top bar ---------- */
+
 .topbar {
-  position: relative;
-  z-index: 1;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(7, 7, 8, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.topbar-inner {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1.75rem 2rem;
+  gap: 1.25rem;
+  padding: 0.9rem 1.5rem;
 }
 
 .brand {
+  flex-shrink: 0;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  font-size: 0.85rem;
 }
 .brand-dot { color: var(--accent); }
 
-.links { display: flex; gap: 1.5rem; }
+.mini-play {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: #0b0b0d;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mini-play:hover { filter: brightness(1.08); }
+
+.mini-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  flex: 1;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.mini-track {
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mini-status #miniStatusText { text-transform: uppercase; flex-shrink: 0; }
+
+.links { display: flex; gap: 1.25rem; flex-shrink: 0; }
 .links a {
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
   color: var(--muted);
   text-transform: lowercase;
 }
 .links a:hover { color: var(--fg); }
 
+/* genre ticker marquee */
+.genre-ticker {
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  background: var(--accent);
+  white-space: nowrap;
+}
+.genre-ticker-track {
+  display: inline-flex;
+  gap: 2.5rem;
+  padding: 0.35rem 0;
+  animation: ticker 22s linear infinite;
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  color: #0b0b0d;
+}
+.genre-ticker-track span::after {
+  content: "/";
+  margin-left: 2.5rem;
+  opacity: 0.5;
+}
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .genre-ticker-track { animation: none; }
+}
+
+/* ---------- main / hero ---------- */
+
 main { position: relative; z-index: 1; }
+
+#ouvir, #episodios, #sobre { scroll-margin-top: 70px; }
 
 .hero {
   position: relative;
-  min-height: 82vh;
+  min-height: 76vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -87,8 +166,8 @@ main { position: relative; z-index: 1; }
   inset: 0;
   z-index: -1;
   background:
-    linear-gradient(180deg, rgba(11,11,13,0.55) 0%, rgba(11,11,13,0.78) 55%, var(--bg) 96%),
-    linear-gradient(90deg, rgba(11,11,13,0.9) 0%, rgba(11,11,13,0.35) 45%, rgba(11,11,13,0.6) 100%);
+    linear-gradient(180deg, rgba(7, 7, 8,0.55) 0%, rgba(7, 7, 8,0.78) 55%, var(--bg) 96%),
+    linear-gradient(90deg, rgba(7, 7, 8,0.9) 0%, rgba(7, 7, 8,0.35) 45%, rgba(7, 7, 8,0.6) 100%);
 }
 
 .hero > * {
@@ -106,10 +185,10 @@ main { position: relative; z-index: 1; }
 }
 
 .title {
-  font-size: clamp(3.5rem, 12vw, 8rem);
-  line-height: 0.92;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 11vw, 7.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
   margin: 0;
   text-transform: uppercase;
 }
@@ -118,7 +197,7 @@ main { position: relative; z-index: 1; }
   margin: 1.25rem 0 2.5rem;
   color: var(--muted);
   font-size: 1rem;
-  font-style: italic;
+  max-width: 34ch;
 }
 
 .player {
@@ -165,17 +244,18 @@ main { position: relative; z-index: 1; }
   height: 8px;
   border-radius: 50%;
   background: var(--muted);
+  flex-shrink: 0;
 }
 .dot.live {
   background: var(--accent);
-  box-shadow: 0 0 0 0 rgba(255, 107, 74, 0.6);
+  box-shadow: 0 0 0 0 rgba(214, 255, 63, 0.6);
   animation: pulse 1.6s infinite;
 }
 
 @keyframes pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(255, 107, 74, 0.55); }
-  70%  { box-shadow: 0 0 0 10px rgba(255, 107, 74, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 107, 74, 0); }
+  0%   { box-shadow: 0 0 0 0 rgba(214, 255, 63, 0.55); }
+  70%  { box-shadow: 0 0 0 10px rgba(214, 255, 63, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(214, 255, 63, 0); }
 }
 
 .track {
@@ -201,17 +281,81 @@ main { position: relative; z-index: 1; }
 }
 .sep { color: var(--accent); margin: 0 0.6em; }
 
+/* ---------- episode cards ---------- */
+
+.episodes {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem 1rem;
+}
+.episodes h2 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0 0 1.5rem;
+}
+.episodes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.episode-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.1rem;
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.episode-card .ep-tag {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0b0b0d;
+  background: var(--accent-2);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+}
+.episode-card .ep-title {
+  font-size: 0.92rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.episode-card.skeleton {
+  background: linear-gradient(100deg, var(--bg-card) 30%, #1e1e23 50%, var(--bg-card) 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* ---------- about ---------- */
+
+.pill {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #0b0b0d;
+  background: var(--accent-2);
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+  margin-bottom: 1.25rem;
+}
+
 .about {
   max-width: 640px;
   margin: 0 auto;
-  padding: 4rem 2rem;
-}
-.about h2 {
-  font-size: 0.85rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--accent-2);
-  margin: 0 0 1.25rem;
+  padding: 3rem 2rem 4rem;
 }
 .about p {
   line-height: 1.7;
@@ -234,7 +378,9 @@ footer {
 @media (max-width: 640px) {
   .hero { align-items: center; text-align: center; }
   .title { text-align: center; }
+  .tagline { max-width: none; }
   .player { flex-direction: column; border-radius: 24px; width: 100%; }
   .track { max-width: 80vw; text-align: center; }
-  .links { gap: 1rem; }
+  .links { display: none; }
+  .mini-status { font-size: 0.65rem; }
 }

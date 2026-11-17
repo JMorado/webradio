@@ -50,3 +50,26 @@ anything up.
   something you're doing wrong.
 - If you can't get mic access to work, double-check the browser's site
   permissions (padlock icon in the address bar → Microphone → Allow).
+
+## Advanced: streaming clean computer audio (optional)
+
+The default method (talking into your mic, holding a phone speaker up to
+it) works fine, but picks up room noise and can echo. If you want to
+stream audio straight from your own computer (e.g. a Spotify/YouTube
+playlist) with no echo, you need a **virtual audio device** — this is a
+per-DJ, per-computer setup, nobody else needs to do anything for you:
+
+- **Mac:** [BlackHole](https://existential.audio/blackhole/) (free)
+- **Windows:** [VB-Audio Virtual Cable](https://vb-audio.com/Cable/) (free)
+- **Linux:** a PulseAudio/PipeWire loopback module
+
+The idea is the same everywhere: install the virtual device, set your
+music app's output (or your whole system output) to it, then in the Web
+DJ page, pick that virtual device as your "microphone" input instead of
+your real mic. Your computer's audio goes straight into the broadcast,
+nothing picked up through the air.
+
+This is optional — only bother with it if you actually want to stream
+music from your computer. A quick heads-up: re-broadcasting copyrighted
+music (e.g. straight from YouTube) to other people isn't really something
+platforms like YouTube allow, so keep that in mind if you go this route.

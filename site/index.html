@@ -4,31 +4,53 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PomboRadio — no ar</title>
-<meta name="description" content="PomboRadio — música diretamente do Montouro. AutoDJ 24/7 e DJs convidados ao vivo." />
+<meta name="description" content="PomboRadio — hip hop, jazz, grime, reggae, rock, blues, soul, dancehall. Tudo misturado, direto do Montouro." />
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <div class="noise"></div>
+  <audio id="stream" preload="none"></audio>
 
   <header class="topbar">
-    <span class="brand">POMBO<span class="brand-dot">RADIO</span></span>
-    <nav class="links">
-      <a href="#ouvir">ouvir</a>
-      <a href="#programas">programas</a>
-      <a href="#djs">djs</a>
-    </nav>
+    <div class="topbar-inner">
+      <span class="brand">POMBO<span class="brand-dot">RADIO</span></span>
+
+      <button id="miniPlayBtn" class="mini-play" aria-label="Ouvir agora">
+        <svg class="mini-icon-play" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+        <svg class="mini-icon-pause" viewBox="0 0 24 24" width="14" height="14" style="display:none"><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+      </button>
+
+      <div class="mini-status">
+        <span id="miniLiveDot" class="dot"></span>
+        <span id="miniStatusText">a ligar&hellip;</span>
+        <span id="miniTrack" class="mini-track"></span>
+      </div>
+
+      <nav class="links">
+        <a href="#ouvir">ouvir</a>
+        <a href="#episodios">episódios</a>
+        <a href="#sobre">sobre</a>
+      </nav>
+    </div>
+
+    <div class="genre-ticker" aria-hidden="true">
+      <div class="genre-ticker-track">
+        <span>HIP HOP</span><span>JAZZ</span><span>GRIME</span><span>REGGAE</span><span>ROCK</span><span>BLUES</span><span>SOUL</span><span>DANCEHALL</span>
+        <span>HIP HOP</span><span>JAZZ</span><span>GRIME</span><span>REGGAE</span><span>ROCK</span><span>BLUES</span><span>SOUL</span><span>DANCEHALL</span>
+      </div>
+    </div>
   </header>
 
   <main>
     <section class="hero" id="ouvir" style="background-image:url('assets/hero.jpg')">
-      <p class="eyebrow">rádio de bairro · montouro</p>
+      <p class="eyebrow">rádio de bairro · montouro · sem filtro</p>
       <h1 class="title">Pombo<br>Radio</h1>
-      <p class="tagline">música diretamente do Montouro</p>
+      <p class="tagline">hip hop, jazz, grime, reggae, rock, blues, soul, dancehall — tudo misturado.</p>
 
       <div class="player">
         <button id="playBtn" class="play-btn" aria-label="Ouvir agora">
@@ -44,20 +66,29 @@
           <div id="trackTitle" class="track">&nbsp;</div>
         </div>
       </div>
-
-      <audio id="stream" preload="none"></audio>
     </section>
 
-    <section class="strip" id="programas">
+    <section class="strip">
       <p>autodj 24/7 <span class="sep">·</span> dj's convidados ao vivo <span class="sep">·</span> sem anúncios <span class="sep">·</span> feito em casa</p>
     </section>
 
-    <section class="about" id="djs">
-      <h2>sobre</h2>
+    <section class="episodes" id="episodios">
+      <h2>tocado recentemente</h2>
+      <div id="historyGrid" class="episodes-grid">
+        <div class="episode-card skeleton"></div>
+        <div class="episode-card skeleton"></div>
+        <div class="episode-card skeleton"></div>
+        <div class="episode-card skeleton"></div>
+      </div>
+    </section>
+
+    <section class="about" id="sobre">
+      <span class="pill">sobre</span>
       <p>
         A PomboRadio é uma rádio feita entre amigos: uma seleção musical eclética
         a tocar sozinha a maior parte do tempo, e de vez em quando alguém entra
-        ao vivo para fazer companhia. Sem grelha fixa, sem pressa.
+        ao vivo para fazer companhia. Sem grelha fixa, sem pressa, sem género
+        único — se é bom, toca.
       </p>
       <p class="muted">Queres transmitir? Pede acesso de DJ a quem gere a estação.</p>
     </section>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>PomboRadio — transmitir</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #0b0b0d;
+    color: #f4f1ea;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  a { color: #ff6b4a; }
+  p { max-width: 420px; padding: 0 1.5rem; line-height: 1.6; }
+</style>
+</head>
+<body>
+  <p id="msg">a abrir a página de transmissão&hellip;<br><br>Se não for redirecionado automaticamente, <a id="manualLink" href="#">clica aqui</a>.</p>
+
+  <script src="../config.js"></script>
+  <script>
+    (function () {
+      var cfg = window.POMBORADIO_CONFIG || {};
+      var base = cfg.STATION_BASE_URL;
+      var shortcode = cfg.STATION_SHORTCODE || "pomboradio";
+
+      if (!base) {
+        document.getElementById("msg").textContent =
+          "Link de transmissão não configurado. Pede ao administrador da estação.";
+        return;
+      }
+
+      var target = base.replace(/\/$/, "") + "/public/" + shortcode + "/dj";
+      document.getElementById("manualLink").href = target;
+      window.location.replace(target);
+    })();
+  </script>
+</body>
+</html>
