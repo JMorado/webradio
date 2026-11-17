@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PomboRadio — no ar</title>
 <meta name="description" content="PomboRadio — hip hop, jazz, grime, reggae, rock, blues, soul, dancehall. Tudo misturado, direto do Montouro." />
-<link rel="icon" href="data:,">
+<!-- SVG emoji favicon -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕊️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Permanent+Marker&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -36,7 +37,19 @@
         <a href="#episodios">episódios</a>
         <a href="#sobre">sobre</a>
       </nav>
+
+      <!-- Mobile hamburger -->
+      <button id="navToggle" class="nav-toggle" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
+
+    <!-- Mobile dropdown nav -->
+    <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
+      <a href="#ouvir">ouvir</a>
+      <a href="#episodios">episódios</a>
+      <a href="#sobre">sobre</a>
+    </nav>
 
     <div class="genre-ticker" aria-hidden="true">
       <div class="genre-ticker-track">
@@ -47,24 +60,37 @@
   </header>
 
   <main>
-    <section class="hero" id="ouvir" style="background-image:url('assets/hero.jpg')">
-      <p class="eyebrow">rádio de bairro · montouro · sem filtro</p>
-      <h1 class="title">Pombo<br>Radio</h1>
-      <p class="tagline">hip hop, jazz, grime, reggae, rock, blues, soul, dancehall — tudo misturado.</p>
+    <section class="hero" id="ouvir">
+      <div class="hero-text">
+        <p class="eyebrow">rádio de bairro · montouro · sem filtro</p>
+        <h1 class="title">Pombo<br>Radio</h1>
+        <p class="tagline">hip hop, jazz, grime, reggae, rock, blues, soul, dancehall — tudo misturado.</p>
 
-      <div class="player">
-        <button id="playBtn" class="play-btn" aria-label="Ouvir agora">
-          <svg id="iconPlay" viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
-          <svg id="iconPause" viewBox="0 0 24 24" width="28" height="28" style="display:none"><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
-        </button>
+        <div class="player">
+          <button id="playBtn" class="play-btn" aria-label="Ouvir agora">
+            <svg id="iconPlay" viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+            <svg id="iconPause" viewBox="0 0 24 24" width="28" height="28" style="display:none"><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+          </button>
 
-        <div class="nowplaying">
-          <div class="status">
-            <span id="liveDot" class="dot"></span>
-            <span id="statusText">a ligar&hellip;</span>
+          <div class="nowplaying">
+            <div class="status">
+              <span id="liveDot" class="dot"></span>
+              <span id="statusText">a ligar&hellip;</span>
+            </div>
+            <div id="trackTitle" class="track">&nbsp;</div>
           </div>
-          <div id="trackTitle" class="track">&nbsp;</div>
+
+          <div class="volume-wrap">
+            <svg class="vol-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+            </svg>
+            <input id="volumeSlider" class="vol-slider" type="range" min="0" max="1" step="0.02" value="1" aria-label="Volume">
+          </div>
         </div>
+      </div>
+
+      <div class="hero-media">
+        <img src="assets/hero.jpg" alt="" />
       </div>
     </section>
 

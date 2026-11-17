@@ -26,9 +26,53 @@
   var miniStatusText = document.getElementById("miniStatusText");
   var miniTrack = document.getElementById("miniTrack");
 
+  // Volume
+  var volumeSlider = document.getElementById("volumeSlider");
+
+  // Mobile nav
+  var navToggle = document.getElementById("navToggle");
+  var mobileNav = document.getElementById("mobileNav");
+
   var historyGrid = document.getElementById("historyGrid");
 
   var isPlaying = false;
+
+  // ---------- volume ----------
+
+  function updateVolumeFill() {
+    var pct = (volumeSlider.value * 100).toFixed(1) + "%";
+    volumeSlider.style.setProperty("--vol", pct);
+  }
+
+  audio.volume = parseFloat(volumeSlider.value);
+  updateVolumeFill();
+
+  volumeSlider.addEventListener("input", function () {
+    audio.volume = parseFloat(volumeSlider.value);
+    updateVolumeFill();
+  });
+
+  // ---------- mobile nav toggle ----------
+
+  if (navToggle && mobileNav) {
+    navToggle.addEventListener("click", function () {
+      var expanded = navToggle.getAttribute("aria-expanded") === "true";
+      navToggle.setAttribute("aria-expanded", String(!expanded));
+      mobileNav.classList.toggle("open", !expanded);
+      mobileNav.setAttribute("aria-hidden", String(expanded));
+    });
+
+    // Close nav when a link is clicked
+    mobileNav.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        navToggle.setAttribute("aria-expanded", "false");
+        mobileNav.classList.remove("open");
+        mobileNav.setAttribute("aria-hidden", "true");
+      });
+    });
+  }
+
+  // ---------- playback ----------
 
   function setPlayingUI(playing) {
     isPlaying = playing;
@@ -62,6 +106,8 @@
     statusText.textContent = "a carregar\u2026";
   });
 
+  // ---------- now playing ----------
+
   function renderNowPlaying(data) {
     var online = !!data.is_online;
     liveDot.classList.toggle("live", online);
@@ -78,7 +124,7 @@
     if (isLiveDj && data.live.streamer_name) {
       display = "ao vivo: " + data.live.streamer_name;
     } else if (song.artist && song.title) {
-      display = song.artist + " — " + song.title;
+      display = song.artist + " \u2014 " + song.title;
     } else if (song.title) {
       display = song.title;
     } else {
@@ -92,9 +138,17 @@
   }
 
   function songDisplayName(song) {
-    if (!song) return "—";
-    if (song.artist && song.title) return song.artist + " — " + song.title;
-    return song.title || song.text || "—";
+    if (!song) return "\u2014";
+    if (song.artist && song.title) return song.artist + " \u2014 " + song.title;
+    return song.title || song.text || "\u2014";
+  }
+
+  function formatTime(ts) {
+    if (!ts) return "";
+    var d = new Date(ts * 1000);
+    var h = d.getHours().toString().padStart(2, "0");
+    var m = d.getMinutes().toString().padStart(2, "0");
+    return h + ":" + m;
   }
 
   function renderHistory(history) {
@@ -107,7 +161,7 @@
       card.className = "episode-card";
 
       var tag = document.createElement("span");
-      tag.className = "ep-tag";
+      tag.className = "ep-tag" + (entry.streamer ? " live" : "");
       tag.textContent = entry.streamer ? "ao vivo" : "autodj";
 
       var title = document.createElement("div");
@@ -116,6 +170,16 @@
 
       card.appendChild(tag);
       card.appendChild(title);
+
+      // Show timestamp if available
+      var playedAt = entry.played_at || (entry.song && entry.song.played_at);
+      if (playedAt) {
+        var timeEl = document.createElement("div");
+        timeEl.className = "ep-time";
+        timeEl.textContent = formatTime(playedAt);
+        card.appendChild(timeEl);
+      }
+
       historyGrid.appendChild(card);
     });
   }
