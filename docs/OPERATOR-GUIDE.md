@@ -13,14 +13,15 @@ cd ~/azuracast
 ./docker.sh start
 ```
 
-Keep these running in separate terminal tabs on the station Mac.
+On the station Mac, the `com.wayout.radio-tunnel` macOS LaunchAgent starts
+`cloudflared` at login and restarts it if it exits. It also keeps the Mac
+awake during idle periods while the tunnel runs. Check the service and find
+its current public address with these commands.
 
 ```sh
-cloudflared tunnel --url http://localhost:80
-```
-
-```sh
-caffeinate -i
+launchctl print "gui/$(id -u)/com.wayout.radio-tunnel"
+grep -Eo 'https://[a-z0-9-]+\.trycloudflare\.com' \
+  ~/Library/Logs/com.wayout.radio-tunnel.err.log | tail -n 1
 ```
 
 A Quick Tunnel prints a new HTTPS address each time it starts. Update both
