@@ -2,203 +2,152 @@
   "use strict";
 
   var cfg = window.POMBORADIO_CONFIG || {};
-  var BASE_URL = cfg.STATION_BASE_URL || "";
-  var SHORTCODE = cfg.STATION_SHORTCODE || "pomboradio";
-  var NOWPLAYING_URL = BASE_URL + "/api/nowplaying/" + SHORTCODE;
-  var STREAM_URL = BASE_URL + "/listen/" + SHORTCODE + "/radio.mp3";
-  var POLL_MS = 15000;
+  var baseUrl = cfg.STATION_BASE_URL || "";
+  var shortcode = cfg.STATION_SHORTCODE || "pomboradio";
+  var nowPlayingUrl = baseUrl + "/api/nowplaying/" + shortcode;
+  var streamUrl = baseUrl + "/listen/" + shortcode + "/radio.mp3";
 
   var audio = document.getElementById("stream");
-
-  // Main hero player
+  var header = document.querySelector(".site-header");
   var playBtn = document.getElementById("playBtn");
-  var iconPlay = document.getElementById("iconPlay");
-  var iconPause = document.getElementById("iconPause");
-  var liveDot = document.getElementById("liveDot");
-  var statusText = document.getElementById("statusText");
+  var playLabel = document.getElementById("playLabel");
+  var stationStatus = document.getElementById("stationStatus");
   var trackTitle = document.getElementById("trackTitle");
-
-  // Sticky mini player (mirrors the hero player)
+  var sourceText = document.getElementById("sourceText");
+  var playbackMessage = document.getElementById("playbackMessage");
+  var miniPlayer = document.getElementById("miniPlayer");
   var miniPlayBtn = document.getElementById("miniPlayBtn");
-  var miniIconPlay = miniPlayBtn.querySelector(".mini-icon-play");
-  var miniIconPause = miniPlayBtn.querySelector(".mini-icon-pause");
-  var miniLiveDot = document.getElementById("miniLiveDot");
-  var miniStatusText = document.getElementById("miniStatusText");
   var miniTrack = document.getElementById("miniTrack");
-
-  // Volume
+  var miniFeedback = document.getElementById("miniFeedback");
   var volumeSlider = document.getElementById("volumeSlider");
 
-  // Mobile nav
-  var navToggle = document.getElementById("navToggle");
-  var mobileNav = document.getElementById("mobileNav");
+  var playbackState = "paused";
+  var playAttempt = 0;
 
-  var historyGrid = document.getElementById("historyGrid");
-
-  var isPlaying = false;
-
-  // ---------- volume ----------
-
-  function updateVolumeFill() {
-    var pct = (volumeSlider.value * 100).toFixed(1) + "%";
-    volumeSlider.style.setProperty("--vol", pct);
+  function setText(element, text) {
+    if (element.textContent !== text) element.textContent = text;
   }
 
-  audio.volume = parseFloat(volumeSlider.value);
-  updateVolumeFill();
-
-  volumeSlider.addEventListener("input", function () {
-    audio.volume = parseFloat(volumeSlider.value);
-    updateVolumeFill();
-  });
-
-  // ---------- mobile nav toggle ----------
-
-  if (navToggle && mobileNav) {
-    navToggle.addEventListener("click", function () {
-      var expanded = navToggle.getAttribute("aria-expanded") === "true";
-      navToggle.setAttribute("aria-expanded", String(!expanded));
-      mobileNav.classList.toggle("open", !expanded);
-      mobileNav.setAttribute("aria-hidden", String(expanded));
-    });
-
-    // Close nav when a link is clicked
-    mobileNav.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        navToggle.setAttribute("aria-expanded", "false");
-        mobileNav.classList.remove("open");
-        mobileNav.setAttribute("aria-hidden", "true");
-      });
-    });
+  function syncMiniPlayer() {
+    var mainControlIsBelowHeader = playBtn.getBoundingClientRect().bottom > header.offsetHeight;
+    if (miniPlayer.hidden !== mainControlIsBelowHeader) {
+      miniPlayer.hidden = mainControlIsBelowHeader;
+    }
   }
 
-  // ---------- playback ----------
+  function setPlayback(state, message) {
+    playbackState = state;
+    playBtn.dataset.playback = state;
+    miniPlayBtn.dataset.playback = state;
 
-  function setPlayingUI(playing) {
-    isPlaying = playing;
-    iconPlay.style.display = playing ? "none" : "block";
-    iconPause.style.display = playing ? "block" : "none";
-    miniIconPlay.style.display = playing ? "none" : "block";
-    miniIconPause.style.display = playing ? "block" : "none";
+    var label = "Ouvir rádio";
+    if (state === "loading") label = "Cancelar";
+    if (state === "playing") label = "Pausar";
+    setText(playLabel, label);
+    miniPlayBtn.setAttribute("aria-label", label);
+
+    setText(playbackMessage, message || "");
+    setText(miniFeedback, message || "");
+    syncMiniPlayer();
+  }
+
+  function playbackFailed() {
+    setPlayback("paused", "Não foi possível ouvir a emissão.");
   }
 
   function togglePlay() {
-    if (!audio.src) {
-      audio.src = STREAM_URL;
-    }
-    if (isPlaying) {
+    var attempt = ++playAttempt;
+    if (playbackState !== "paused" || !audio.paused) {
       audio.pause();
-      setPlayingUI(false);
-    } else {
-      audio.play().then(function () {
-        setPlayingUI(true);
-      }).catch(function () {
-        statusText.textContent = "não foi possível tocar";
-        miniStatusText.textContent = "erro";
-      });
+      audio.removeAttribute("src");
+      audio.load();
+      setPlayback("paused");
+      return;
     }
+
+    audio.src = streamUrl;
+    setPlayback("loading", "A ligar à emissão…");
+    audio.play().catch(function () {
+      if (attempt === playAttempt) playbackFailed();
+    });
   }
 
   playBtn.addEventListener("click", togglePlay);
   miniPlayBtn.addEventListener("click", togglePlay);
 
-  audio.addEventListener("waiting", function () {
-    statusText.textContent = "a carregar\u2026";
+  audio.addEventListener("playing", function () {
+    if (!audio.paused) setPlayback("playing");
   });
 
-  // ---------- now playing ----------
+  audio.addEventListener("waiting", function () {
+    if (playbackState === "playing") setPlayback("playing", "A carregar a emissão…");
+  });
+
+  audio.addEventListener("pause", function () {
+    if (audio.paused && playbackState !== "paused") setPlayback("paused");
+  });
+
+  audio.addEventListener("error", function () {
+    if (audio.error && playbackState !== "paused") playbackFailed();
+  });
+
+  audio.volume = 0.5;
+  if (audio.volume === 0.5) {
+    audio.volume = Number(volumeSlider.value);
+    volumeSlider.addEventListener("input", function () {
+      audio.volume = Number(volumeSlider.value);
+    });
+  } else {
+    volumeSlider.closest("label").hidden = true;
+  }
+
+  window.addEventListener("scroll", syncMiniPlayer, { passive: true });
+  window.addEventListener("resize", syncMiniPlayer);
+  window.addEventListener("pageshow", syncMiniPlayer);
+  syncMiniPlayer();
+
+  function setStation(status, online, track, source) {
+    stationStatus.dataset.online = String(online);
+    setText(stationStatus, status);
+    setText(trackTitle, track);
+    setText(sourceText, source);
+    sourceText.hidden = !source;
+    setText(miniTrack, online ? track : status);
+    syncMiniPlayer();
+  }
 
   function renderNowPlaying(data) {
-    var online = !!data.is_online;
-    liveDot.classList.toggle("live", online);
-    miniLiveDot.classList.toggle("live", online);
-
-    var label = online ? "no ar" : "offline";
-    statusText.textContent = label;
-    miniStatusText.textContent = label;
-
-    var song = (data.now_playing && data.now_playing.song) || {};
-    var isLiveDj = data.live && data.live.is_live;
-
-    var display;
-    if (isLiveDj && data.live.streamer_name) {
-      display = "ao vivo: " + data.live.streamer_name;
-    } else if (song.artist && song.title) {
-      display = song.artist + " \u2014 " + song.title;
-    } else if (song.title) {
-      display = song.title;
-    } else {
-      display = "";
+    if (!data.is_online) {
+      setStation("Fora do ar", false, "Não há emissão neste momento.", "");
+      return;
     }
 
-    trackTitle.textContent = display || "\u00A0";
-    miniTrack.textContent = display;
+    var song = (data.now_playing && data.now_playing.song) || {};
+    var track = song.title || song.text || "Música em emissão";
+    if (song.artist && song.title) track = song.artist + " — " + song.title;
 
-    renderHistory(data.song_history || []);
-  }
+    var live = data.live;
+    var source = "AutoDJ";
+    if (live && live.is_live) {
+      source = "DJ ao vivo";
+      if (live.streamer_name) source += " · " + live.streamer_name;
+    }
 
-  function songDisplayName(song) {
-    if (!song) return "\u2014";
-    if (song.artist && song.title) return song.artist + " \u2014 " + song.title;
-    return song.title || song.text || "\u2014";
-  }
-
-  function formatTime(ts) {
-    if (!ts) return "";
-    var d = new Date(ts * 1000);
-    var h = d.getHours().toString().padStart(2, "0");
-    var m = d.getMinutes().toString().padStart(2, "0");
-    return h + ":" + m;
-  }
-
-  function renderHistory(history) {
-    if (!historyGrid) return;
-    if (!history.length) return;
-
-    historyGrid.innerHTML = "";
-    history.slice(0, 8).forEach(function (entry) {
-      var card = document.createElement("div");
-      card.className = "episode-card";
-
-      var tag = document.createElement("span");
-      tag.className = "ep-tag" + (entry.streamer ? " live" : "");
-      tag.textContent = entry.streamer ? "ao vivo" : "autodj";
-
-      var title = document.createElement("div");
-      title.className = "ep-title";
-      title.textContent = songDisplayName(entry.song);
-
-      card.appendChild(tag);
-      card.appendChild(title);
-
-      // Show timestamp if available
-      var playedAt = entry.played_at || (entry.song && entry.song.played_at);
-      if (playedAt) {
-        var timeEl = document.createElement("div");
-        timeEl.className = "ep-time";
-        timeEl.textContent = formatTime(playedAt);
-        card.appendChild(timeEl);
-      }
-
-      historyGrid.appendChild(card);
-    });
+    setStation("No ar", true, track, source);
   }
 
   function fetchNowPlaying() {
-    fetch(NOWPLAYING_URL, { cache: "no-store" })
-      .then(function (res) {
-        if (!res.ok) {
-          throw new Error("bad response");
-        }
-        return res.json();
+    fetch(nowPlayingUrl, { cache: "no-store" })
+      .then(function (response) {
+        if (!response.ok) throw new Error("Erro ao consultar a emissão");
+        return response.json();
       })
       .then(renderNowPlaying)
       .catch(function () {
-        statusText.textContent = "sem ligação";
-        miniStatusText.textContent = "sem ligação";
+        setStation("Sem ligação", false, "Informação da emissão indisponível.", "");
       });
   }
 
   fetchNowPlaying();
-  setInterval(fetchNowPlaying, POLL_MS);
+  setInterval(fetchNowPlaying, 15000);
 })();

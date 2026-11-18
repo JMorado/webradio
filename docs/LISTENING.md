@@ -1,28 +1,16 @@
 # Listening to PomboRadio
 
-No app, no account, no download needed — it plays straight from your browser.
+Open [PomboRadio](https://pomboradio.pages.dev/) and press **Ouvir rádio**.
+The player shows the current track and whether AutoDJ or a guest DJ is on.
+Press **Pausar** to stop listening. A compact player appears in the header
+as you scroll past the main controls.
 
-## How to listen
+See [Programação](https://pomboradio.pages.dev/#programacao) for upcoming
+sets. Programme times use mainland Portugal time. AutoDJ plays between sets.
 
-1. Open **https://pomboradio.pages.dev**
-2. Press the big play button (▶).
-3. Done. You'll hear AutoDJ playing music automatically, or a friend live
-   if someone's broadcasting.
+## If the stream is unavailable
 
-The dot next to "NO AR" (on air) lights up and pulses when the station is
-live, and the line under it shows the current song (or who's live).
-
-## Nothing plays / "offline"?
-
-1. **Refresh the page** first — the "now playing" info can lag a few
-   seconds.
-2. If it's still not working, **message the station operator** and ask if
-   the station is up. The radio runs on someone's home computer, so it only
-   plays when that computer is on — the operator can check and fix it.
-
-That's it — you never need any link other than the one above.
-
-## Can I request a song or chat?
-
-Not yet — this is intentionally bare-bones. If that'd be fun, ask the
-operator about turning on song requests.
+Try **Ouvir rádio** again after a short wait. If the player stays on
+**Fora do ar** or **Sem ligação**, the station Mac or its tunnel may be
+offline. Contact the station operator if the problem persists. You can
+still check upcoming programmes while the stream is unavailable.

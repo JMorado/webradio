@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f5eddb">
+  <title>Programação · Administração PomboRadio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+  <script src="/admin/admin.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner page-width">
+      <a class="wordmark" href="/">Pombo<span>Radio</span></a>
+      <nav class="site-nav" aria-label="Administração">
+        <a href="/#programacao">Ver grelha</a>
+        <button type="button" class="text-button" id="logout" hidden>Sair</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-width admin">
+    <p class="eyebrow">Administração</p>
+    <h1 class="admin-title">Programação</h1>
+
+    <form class="login-form admin-panel" id="loginForm" method="post" hidden>
+      <h2>Entrar</h2>
+      <label for="accessKey">Chave de acesso</label>
+      <input id="accessKey" name="key" type="password" required autocomplete="current-password" maxlength="64">
+      <button class="admin-primary" type="submit">Entrar</button>
+    </form>
+
+    <p id="feedback" class="admin-feedback" role="status">A verificar a sessão…</p>
+
+    <div id="dashboard" class="dashboard" hidden>
+      <section class="programme-list-section" aria-labelledby="programmeListTitle">
+        <div class="admin-section-header">
+          <h2 id="programmeListTitle">Programas</h2>
+          <button type="button" id="reload" class="text-button">Atualizar</button>
+        </div>
+        <p id="emptyList" hidden>Ainda não há programas. Adiciona o primeiro para começar.</p>
+        <ul id="programmeList" class="programme-list"></ul>
+      </section>
+
+      <form class="admin-panel editor" id="programmeForm" method="post">
+        <div class="admin-section-header">
+          <h2 id="editorTitle">Novo programa</h2>
+          <button class="text-button" type="button" id="resetEditor" hidden>Novo programa</button>
+        </div>
+        <label for="title">Nome do programa</label>
+        <input id="title" name="title" required maxlength="100">
+
+        <label for="host">DJ ou apresentador</label>
+        <input id="host" name="host" maxlength="80">
+
+        <label for="description">Descrição</label>
+        <textarea id="description" name="description" rows="3" maxlength="500"></textarea>
+
+        <div class="editor-dates">
+          <label>Data
+            <input name="starts_on" type="date" required aria-describedby="stationTime">
+          </label>
+          <label>Início
+            <input name="starts_at" type="time" required aria-describedby="stationTime">
+          </label>
+          <label>Duração (min)
+            <input name="duration_minutes" type="number" min="5" max="1440" value="60" required>
+          </label>
+        </div>
+        <p class="editor-time" id="stationTime">Hora de Portugal continental.</p>
+
+        <label for="weekly">Repetição</label>
+        <select id="weekly" name="weekly">
+          <option value="false">Uma vez</option>
+          <option value="true">Todas as semanas, a partir desta data</option>
+        </select>
+
+        <label class="publish-choice"><input type="checkbox" name="published"> Mostrar na grelha pública</label>
+        <div class="editor-actions">
+          <button class="admin-primary" type="submit" id="saveProgramme">Guardar rascunho</button>
+          <button class="text-button delete-button" type="button" id="deleteProgramme" hidden>Apagar</button>
+        </div>
+        <p id="editorFeedback" class="admin-feedback" role="status"></p>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,118 +1,114 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-PT">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PomboRadio — no ar</title>
-<meta name="description" content="PomboRadio — hip hop, jazz, grime, reggae, rock, blues, soul, dancehall. Tudo misturado, direto do Montouro." />
-<!-- SVG emoji favicon -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕊️</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Permanent+Marker&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5eddb">
+  <title>PomboRadio — Rádio de bairro, direto do Montouro</title>
+  <meta name="description" content="PomboRadio, rádio independente do Montouro. Hip hop, jazz, grime, reggae, rock, blues, soul e dancehall, tudo misturado.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕊️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header class="site-header">
+    <div class="header-inner page-width page-columns">
+      <a class="wordmark" href="#ouvir">Pombo<span>Radio</span></a>
 
-  <div class="noise"></div>
-  <audio id="stream" preload="none"></audio>
+      <div class="header-actions">
+        <div class="mini-player" id="miniPlayer" hidden>
+          <button class="play-control mini-button" id="miniPlayBtn" type="button" data-playback="paused" aria-label="Ouvir rádio">
+            <span class="play-icon" aria-hidden="true"></span>
+          </button>
+          <span class="mini-title" id="miniTrack"></span>
+          <span class="mini-feedback" id="miniFeedback" aria-hidden="true"></span>
+        </div>
 
-  <header class="topbar">
-    <div class="topbar-inner">
-      <span class="brand">POMBO<span class="brand-dot">RADIO</span></span>
-
-      <button id="miniPlayBtn" class="mini-play" aria-label="Ouvir agora">
-        <svg class="mini-icon-play" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
-        <svg class="mini-icon-pause" viewBox="0 0 24 24" width="14" height="14" style="display:none"><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
-      </button>
-
-      <div class="mini-status">
-        <span id="miniLiveDot" class="dot"></span>
-        <span id="miniStatusText">a ligar&hellip;</span>
-        <span id="miniTrack" class="mini-track"></span>
-      </div>
-
-      <nav class="links">
-        <a href="#ouvir">ouvir</a>
-        <a href="#sobre">sobre</a>
-      </nav>
-
-      <!-- Mobile hamburger -->
-      <button id="navToggle" class="nav-toggle" aria-label="Menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-
-    <!-- Mobile dropdown nav -->
-    <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
-      <a href="#ouvir">ouvir</a>
-      <a href="#sobre">sobre</a>
-    </nav>
-
-    <div class="genre-ticker" aria-hidden="true">
-      <div class="genre-ticker-track">
-        <span>HIP HOP</span><span>JAZZ</span><span>GRIME</span><span>REGGAE</span><span>ROCK</span><span>BLUES</span><span>SOUL</span><span>DANCEHALL</span>
-        <span>HIP HOP</span><span>JAZZ</span><span>GRIME</span><span>REGGAE</span><span>ROCK</span><span>BLUES</span><span>SOUL</span><span>DANCEHALL</span>
+        <nav class="site-nav" aria-label="Navegação principal">
+          <a href="#ouvir">Ouvir</a>
+          <a href="#programacao">Programação</a>
+          <a href="#sobre">Sobre</a>
+        </nav>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="hero" id="ouvir">
-      <div class="hero-text">
-        <p class="eyebrow">rádio de bairro · montouro · sem filtro</p>
-        <h1 class="title">Pombo<br>Radio</h1>
-        <p class="tagline">hip hop, jazz, grime, reggae, rock, blues, soul, dancehall — tudo misturado.</p>
+    <section class="hero page-width page-columns" id="ouvir" aria-labelledby="stationName">
+      <div class="hero-content">
+        <p class="eyebrow">Rádio independente</p>
+        <h1 class="hero-title" id="stationName">Pombo<span>Radio</span></h1>
+        <p class="hero-intro">Rádio de bairro, direto do Montouro.</p>
 
-        <div class="player">
-          <button id="playBtn" class="play-btn" aria-label="Ouvir agora">
-            <svg id="iconPlay" viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
-            <svg id="iconPause" viewBox="0 0 24 24" width="28" height="28" style="display:none"><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
-          </button>
-
-          <div class="nowplaying">
-            <div class="status">
-              <span id="liveDot" class="dot"></span>
-              <span id="statusText">a ligar&hellip;</span>
-            </div>
-            <div id="trackTitle" class="track">&nbsp;</div>
+        <section class="player" aria-labelledby="playerTitle">
+          <div class="player-header">
+            <h2 class="player-label" id="playerTitle">Na emissão</h2>
+            <span class="station-status" id="stationStatus" data-online="false" role="status">A ligar…</span>
           </div>
 
-          <div class="volume-wrap">
-            <svg class="vol-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-              <path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
-            </svg>
-            <input id="volumeSlider" class="vol-slider" type="range" min="0" max="1" step="0.02" value="1" aria-label="Volume">
+          <div class="now-playing">
+            <p class="track" id="trackTitle">A procurar a emissão…</p>
+            <p class="source" id="sourceText" hidden></p>
           </div>
+
+          <div class="player-controls">
+            <button class="play-control play-button" id="playBtn" type="button" data-playback="paused">
+              <span class="play-icon" aria-hidden="true"></span>
+              <span id="playLabel">Ouvir rádio</span>
+            </button>
+            <label class="volume">
+              <span>Volume</span>
+              <input id="volumeSlider" type="range" min="0" max="1" step="0.02" value="1">
+            </label>
+          </div>
+          <p class="playback-message" id="playbackMessage" role="status"></p>
+        </section>
+      </div>
+
+      <div class="hero-art">
+        <img
+          src="assets/pombo-vinyl.webp"
+          srcset="assets/pombo-vinyl-small.webp 640w, assets/pombo-vinyl.webp 1200w"
+          sizes="(max-width: 47rem) 94vw, (max-width: 85rem) 48vw, 40rem"
+          width="1200" height="1200"
+          alt="Ilustração de um pombo sobre um disco de vinil, em creme, preto e laranja."
+          fetchpriority="high"
+        >
+      </div>
+    </section>
+
+    <section class="schedule" id="programacao" aria-labelledby="scheduleTitle">
+      <div class="schedule-inner page-width">
+        <h2 class="schedule-title" id="scheduleTitle">Programação</h2>
+        <p class="schedule-status" id="scheduleStatus" role="status">A carregar a programação…</p>
+        <ul class="schedule-list" id="scheduleList"></ul>
+      </div>
+    </section>
+
+    <section class="about" id="sobre" aria-labelledby="aboutTitle">
+      <div class="about-inner page-width page-columns">
+        <h2 id="aboutTitle">Uma rádio feita entre amigos.</h2>
+        <div class="about-copy">
+          <p>O AutoDJ toca 24 horas por dia, sem anúncios. De vez em quando, alguém entra ao vivo para fazer companhia.</p>
+          <p>Hip hop, jazz, grime, reggae, rock, blues, soul e dancehall. Tudo misturado.</p>
+          <p class="dj-note">Queres transmitir? Pede acesso de DJ a quem gere a estação.</p>
         </div>
       </div>
-
-      <div class="hero-media">
-        <img src="assets/hero.jpg" alt="" />
-      </div>
-    </section>
-
-    <section class="strip">
-      <p>autodj 24/7 <span class="sep">·</span> dj's convidados ao vivo <span class="sep">·</span> sem anúncios <span class="sep">·</span> feito em casa</p>
-    </section>
-
-    <section class="about" id="sobre">
-      <span class="pill">sobre</span>
-      <p>
-        A PomboRadio é uma rádio feita entre amigos: uma seleção musical eclética
-        a tocar sozinha a maior parte do tempo, e de vez em quando alguém entra
-        ao vivo para fazer companhia. Sem grelha fixa, sem pressa, sem género
-        único — se é bom, toca.
-      </p>
-      <p class="muted">Queres transmitir? Pede acesso de DJ a quem gere a estação.</p>
     </section>
   </main>
 
-  <footer>
-    <p>pomboradio · feito à mão, a tocar sempre</p>
+  <footer class="site-footer">
+    <div class="footer-inner page-width">
+      <p>PomboRadio · Feito em casa</p>
+      <a href="#ouvir">Voltar ao topo ↑</a>
+    </div>
   </footer>
 
+  <audio id="stream" preload="none"></audio>
   <script src="config.js"></script>
   <script src="script.js"></script>
+  <script src="schedule.js"></script>
 </body>
 </html>

@@ -1,0 +1,13 @@
+{
+  "name": "pomboradio",
+  // Local only. Cloudflare Pages uses the dashboard bindings for deployments.
+  "compatibility_date": "2026-11-01",
+  "send_metrics": false,
+  "d1_databases": [
+    {
+      "binding": "PROGRAMACAO_DB",
+      "database_name": "pomboradio-programacao-local",
+      "database_id": "00000000-0000-4000-8000-000000000001"
+    }
+  ]
+}
