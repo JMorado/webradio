@@ -6,7 +6,7 @@ if you want it listed on the site.
 
 ## Start a set
 
-1. Open [Web DJ](https://pomboradio.pages.dev/dj/) in Chrome or Firefox.
+1. Open [Web DJ](https://wayout.pages.dev/dj/) in Chrome or Firefox.
    If it stops working after a station restart, ask the operator for the
    current Web DJ link.
 2. Log in, allow microphone access and select your input. Use headphones

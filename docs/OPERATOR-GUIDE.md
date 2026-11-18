@@ -1,4 +1,4 @@
-# Operating PomboRadio
+# Operating WAY OUT Radio
 
 The station Mac runs AzuraCast, AutoDJ and Web DJ. Cloudflare hosts the
 website and its programme editor. For schedule changes and its database,
@@ -39,7 +39,7 @@ docker exec azuracast azuracast_cli azuracast:radio:restart 1
 ```
 
 After deployment, try **Ouvir rádio** on the homepage and open
-[/dj/](https://pomboradio.pages.dev/dj/) to check the redirect. The tunnel
+[/dj/](https://wayout.pages.dev/dj/) to check the redirect. The tunnel
 address is visible to listeners because their browsers connect to it
 directly. The AzuraCast admin and DJs use separate private accounts.
 
@@ -72,9 +72,9 @@ the public schedule API. A successful schedule response contains an
 `entries` array, which is empty when there are no upcoming shows.
 The programme editor asks for its own access key.
 
-- [Listener homepage](https://pomboradio.pages.dev/)
-- [Public schedule API](https://pomboradio.pages.dev/api/programacao)
-- [Programme admin](https://pomboradio.pages.dev/admin/)
+- [Listener homepage](https://wayout.pages.dev/)
+- [Public schedule API](https://wayout.pages.dev/api/programacao)
+- [Programme admin](https://wayout.pages.dev/admin/)
 
 ## Troubleshooting
 

@@ -8,6 +8,8 @@
   const weekday = new Intl.DateTimeFormat("pt-PT", { timeZone, weekday: "long", month: "short", day: "numeric" });
   const clock = new Intl.DateTimeFormat("pt-PT", { timeZone, hour: "2-digit", minute: "2-digit" });
   let lastSchedule = "";
+  let programmes = [];
+  let markerTimer;
   let fetching = false;
 
   function report(message) {
@@ -33,12 +35,19 @@
     title.textContent = entry.title;
     details.append(title);
 
+    const meta = document.createElement("div");
+    meta.className = "schedule-meta";
     if (entry.host) {
       const host = document.createElement("p");
       host.className = "schedule-host";
       host.textContent = entry.host;
-      details.append(host);
+      meta.append(host);
     }
+    const marker = document.createElement("span");
+    marker.className = "schedule-marker";
+    marker.hidden = true;
+    meta.append(marker);
+    details.append(meta);
 
     const summary = document.createElement("div");
     summary.className = "schedule-summary";
@@ -54,7 +63,30 @@
       description.textContent = entry.description;
       item.append(description);
     }
-    return item;
+    return { item, marker, start: start.getTime(), end: end.getTime() };
+  }
+
+  function updateMarkers() {
+    window.clearTimeout(markerTimer);
+    const now = Date.now();
+    let nextStart;
+    let nextChange = Infinity;
+    for (const { marker, start, end } of programmes) {
+      let label = "";
+      if (now < start) {
+        nextStart ??= start;
+        if (start === nextStart) label = "A seguir";
+        nextChange = Math.min(nextChange, start);
+      } else if (now < end) {
+        label = "Agora";
+        nextChange = Math.min(nextChange, end);
+      }
+      if (marker.textContent !== label) marker.textContent = label;
+      marker.hidden = !label;
+    }
+    if (Number.isFinite(nextChange)) {
+      markerTimer = window.setTimeout(updateMarkers, Math.min(nextChange - now, 2_147_483_647));
+    }
   }
 
   async function updateSchedule() {
@@ -66,13 +98,15 @@
       const payload = await response.json();
       const signature = JSON.stringify(payload);
       if (lastSchedule !== signature) {
-        list.replaceChildren(...payload.entries.map((entry) => renderEntry(entry, payload.today)));
+        programmes = payload.entries.map((entry) => renderEntry(entry, payload.today));
+        updateMarkers();
+        list.replaceChildren(...programmes.map(({ item }) => item));
         lastSchedule = signature;
       }
-      report(payload.entries.length ? "" : "Ainda não há programas marcados para os próximos dias.");
+      report(payload.entries.length ? "" : "Sem programas previstos para os próximos dias.");
     } catch {
       report(list.children.length
-        ? "Sem ligação. A mostrar a última programação disponível."
+        ? "Não foi possível atualizar a programação. A mostrar a última versão disponível."
         : "Programação temporariamente indisponível.");
     } finally {
       fetching = false;
@@ -81,5 +115,9 @@
 
   updateSchedule();
   window.setInterval(updateSchedule, 30000);
-  document.addEventListener("visibilitychange", updateSchedule);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) return;
+    updateMarkers();
+    updateSchedule();
+  });
 })();

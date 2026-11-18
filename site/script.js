@@ -23,6 +23,12 @@
 
   var playbackState = "paused";
   var playAttempt = 0;
+  var playbackLabels = {
+    paused: "Ouvir rádio",
+    loading: "Cancelar",
+    playing: "Pausar",
+    failed: "Tentar novamente",
+  };
 
   function setText(element, text) {
     if (element.textContent !== text) element.textContent = text;
@@ -40,9 +46,7 @@
     playBtn.dataset.playback = state;
     miniPlayBtn.dataset.playback = state;
 
-    var label = "Ouvir rádio";
-    if (state === "loading") label = "Cancelar";
-    if (state === "playing") label = "Pausar";
+    var label = playbackLabels[state];
     setText(playLabel, label);
     miniPlayBtn.setAttribute("aria-label", label);
 
@@ -51,20 +55,29 @@
     syncMiniPlayer();
   }
 
+  function isPlaybackActive() {
+    return playbackState === "loading" || playbackState === "playing";
+  }
+
+  function stopPlayback(state, message) {
+    ++playAttempt;
+    setPlayback(state, message);
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
+  }
+
   function playbackFailed() {
-    setPlayback("paused", "Não foi possível ouvir a emissão.");
+    stopPlayback("failed", "Não foi possível reproduzir a emissão.");
   }
 
   function togglePlay() {
-    var attempt = ++playAttempt;
-    if (playbackState !== "paused" || !audio.paused) {
-      audio.pause();
-      audio.removeAttribute("src");
-      audio.load();
-      setPlayback("paused");
+    if (isPlaybackActive()) {
+      stopPlayback("paused");
       return;
     }
 
+    var attempt = ++playAttempt;
     audio.src = streamUrl;
     setPlayback("loading", "A ligar à emissão…");
     audio.play().catch(function () {
@@ -76,7 +89,7 @@
   miniPlayBtn.addEventListener("click", togglePlay);
 
   audio.addEventListener("playing", function () {
-    if (!audio.paused) setPlayback("playing");
+    if (isPlaybackActive() && !audio.paused) setPlayback("playing");
   });
 
   audio.addEventListener("waiting", function () {
@@ -84,11 +97,15 @@
   });
 
   audio.addEventListener("pause", function () {
-    if (audio.paused && playbackState !== "paused") setPlayback("paused");
+    if (playbackState === "playing" && audio.paused && !audio.error && !audio.ended) stopPlayback("paused");
   });
 
   audio.addEventListener("error", function () {
-    if (audio.error && playbackState !== "paused") playbackFailed();
+    if (isPlaybackActive() && audio.error) playbackFailed();
+  });
+
+  audio.addEventListener("ended", function () {
+    if (isPlaybackActive() && audio.ended) playbackFailed();
   });
 
   audio.volume = 0.5;
@@ -118,7 +135,7 @@
 
   function renderNowPlaying(data) {
     if (!data.is_online) {
-      setStation("Fora do ar", false, "Não há emissão neste momento.", "");
+      setStation("Fora do ar", false, "Emissão indisponível de momento.", "");
       return;
     }
 
@@ -126,25 +143,20 @@
     var track = song.title || song.text || "Música em emissão";
     if (song.artist && song.title) track = song.artist + " — " + song.title;
 
-    var live = data.live;
-    var source = "AutoDJ";
-    if (live && live.is_live) {
-      source = "DJ ao vivo";
-      if (live.streamer_name) source += " · " + live.streamer_name;
-    }
-
-    setStation("No ar", true, track, source);
+    var isLive = data.live && data.live.is_live;
+    var source = isLive ? data.live.streamer_name || "Sessão de DJ" : "Seleção automática";
+    setStation(isLive ? "Em direto" : "No ar", true, track, source);
   }
 
   function fetchNowPlaying() {
     fetch(nowPlayingUrl, { cache: "no-store" })
       .then(function (response) {
-        if (!response.ok) throw new Error("Erro ao consultar a emissão");
+        if (!response.ok) throw new Error("Informação da emissão indisponível");
         return response.json();
       })
       .then(renderNowPlaying)
       .catch(function () {
-        setStation("Sem ligação", false, "Informação da emissão indisponível.", "");
+        setStation("Sem informação", false, "Não foi possível carregar a faixa atual.", "");
       });
   }
 

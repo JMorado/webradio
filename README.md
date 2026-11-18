@@ -1,10 +1,10 @@
-# PomboRadio
+# WAY OUT Radio
 
-PomboRadio is an independent internet radio station from Montouro. AutoDJ
+WAY OUT Radio is an independent online station broadcasting worldwide. AutoDJ
 keeps the music going between sets from guest DJs.
 
-- [Listen to PomboRadio](https://pomboradio.pages.dev/)
-- [See the programme schedule](https://pomboradio.pages.dev/#programacao)
+- [Listen to WAY OUT Radio](https://wayout.pages.dev/)
+- [See the programme schedule](https://wayout.pages.dev/#programacao)
 - [Read the listener guide](docs/LISTENING.md)
 - [Broadcast a guest set](docs/DJ-GUIDE.md)
 - [Manage the programme schedule](docs/PROGRAMACAO.md)

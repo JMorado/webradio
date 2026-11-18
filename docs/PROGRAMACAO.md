@@ -1,8 +1,8 @@
-# Programação da PomboRadio
+# Programação da WAY OUT Radio
 
 ## Criar e publicar programas
 
-Entra no [painel da PomboRadio](https://pomboradio.pages.dev/admin/) com a
+Entra no [painel da WAY OUT Radio](https://wayout.pages.dev/admin/) com a
 chave de acesso da equipa. Para criar um programa, indica um nome, data,
 hora de início e duração. Podes acrescentar o nome do DJ e uma descrição,
 e escolher entre uma data única ou repetição semanal.
@@ -35,7 +35,7 @@ programas de teste nessa base. A chave e os dados locais ficam fora do Git.
 
 ## Configuração de produção
 
-O projeto Pages `pomboradio` usa a base D1 `pomboradio-programacao`,
+O projeto Pages `wayout` usa a base D1 `pomboradio-programacao`,
 associada em **Settings → Bindings → Production** como
 `PROGRAMACAO_DB`. A chave de produção fica em **Variables and Secrets**
 com o nome `ADMIN_ACCESS_KEY`. Ao criar ou rodar a chave, gera 64
